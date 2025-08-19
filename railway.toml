@@ -3,10 +3,10 @@
 dockerfile = "Dockerfile.railway"
 
 [deploy]
-# Railway автоматически установит PORT переменную
-healthcheckPath = "/"
-healthcheckTimeout = 300
+# Railway автоматически установит PORT переменную для HTTP
+# Но мы используем UDP порты для игрового трафика
 startCommand = "./start-railway.sh"
+restartPolicyType = "always"
 
 [experimental]
 # Включаем поддержку UDP трафика для игровых соединений  
