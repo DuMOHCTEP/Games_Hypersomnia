@@ -1,23 +1,22 @@
 [build]
-# Указываем использовать специальный Dockerfile для Railway
-dockerfile = "Dockerfile.railway"
+# Указываем использовать полный Dockerfile с веб-клиентом + сервером
+dockerfile = "Dockerfile.fullstack"
 
 [deploy]
 # Railway автоматически установит PORT переменную для HTTP
-# Но мы используем UDP порты для игрового трафика
-startCommand = "./start-railway.sh"
+startCommand = "/home/hypersomniac/start-fullstack.sh"
 restartPolicyType = "always"
 
 [experimental]
-# Включаем поддержку UDP трафика для игровых соединений  
+# Включаем поддержку UDP трафика для игровых соединений
 incrementalBuilds = false
 
-# Переменные окружения для настройки сервера Hypersomnia
+# Переменные окружения для полной связки веб-клиент + сервер
 [environments.production.variables]
 # Основные настройки сервера
-SERVER_NAME = "[Railway] Hypersomnia Production Server"
+SERVER_NAME = "[Portal] Hypersomnia Production"
 MAX_PLAYERS = "20"
-RCON_PASSWORD = "secure_railway_password_2024"
+RCON_PASSWORD = "secure_portal_password_2024"
 
 # Настройки карт и режимов
 DEFAULT_ARENA = "de_cyberaqua"
@@ -28,18 +27,23 @@ DAILY_AUTOUPDATE = "false"
 CASUAL_SERVERS = "1"
 RANKED_SERVERS = "0"
 
-# Настройки портов (Railway автоматически назначит PORT)
+# Настройки портов (Railway автоматически назначит PORT для HTTP)
 WEBRTC_PORT = "9000"
 
 # Дополнительные флаги (опционально)
-EXTRA_FLAGS = "--daily-autoupdate"
+EXTRA_FLAGS = ""
+
+# Брендинг игрового портала
+PORTAL_NAME = "Ваш Игровой Портал"
+PORTAL_DOMAIN = "your-railway-domain.railway.app"
 
 [environments.development.variables]
 # Настройки для тестирования
-SERVER_NAME = "[Railway-Dev] Hypersomnia Test Server"
-MAX_PLAYERS = "10"
-RCON_PASSWORD = "dev_password_123"
+SERVER_NAME = "[Portal-Dev] Test Server"
+MAX_PLAYERS = "8"
+RCON_PASSWORD = "dev_portal_123"
 DEFAULT_ARENA = "de_duel_practice"
 SYNC_ARENAS = "false"
 CASUAL_SERVERS = "1"
 RANKED_SERVERS = "0"
+PORTAL_NAME = "Dev Portal"
