@@ -1,0 +1,68 @@
+# Railway ignore file - исключает файлы из сборки
+
+# Директории сборки и кеша
+build/
+bin/
+obj/
+output/
+temp/
+tmp/
+cache/
+
+# IDE и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Документация (не нужна для runtime)
+docs/
+*.md
+!README_RAILWAY.md
+
+# Исходный код (нужен только AppImage)
+src/
+hypersomnia/
+cmake/
+
+# Файлы разработки
+CMakeLists.txt
+*.cmake
+Makefile*
+
+# Оригинальный Docker (используем Dockerfile.railway)
+Dockerfile
+docker-compose.yaml
+!Dockerfile.railway
+
+# Логи
+logs/
+*.log
+
+# Тестовые файлы  
+test/
+tests/
+__tests__/
+
+# Конфигурация для других платформ
+.github/
+appveyor.yml
+
+# Большие медиа файлы (если есть)
+*.mp4
+*.avi
+*.mov
+
+# Архивы
+*.zip
+*.tar.gz
+*.7z

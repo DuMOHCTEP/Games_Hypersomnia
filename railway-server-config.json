@@ -1,0 +1,50 @@
+{
+  "server_start": {
+    "slots": 20,
+    "port": 8412
+  },
+  "server": {
+    "server_name": "[Railway] Hypersomnia Community Server",
+    "server_description": "Развертнут на Railway.app",
+    
+    "webrtc_udp_mux": true,
+    "webrtc_port_range_begin": 9000,
+    
+    "sync_all_external_arenas_on_startup": true,
+    "daily_autoupdate": false,
+    
+    "arena": "de_cyberaqua",
+    "cycle": "LIST",
+    "cycle_list": [
+      "de_cyberaqua",
+      "de_silo", 
+      "de_metro",
+      "de_duel_practice",
+      "de_facing_worlds",
+      "fy_minilab",
+      "de_labirynth"
+    ],
+    
+    "warmup_seconds": 10,
+    "freeze_secs": 3,
+    
+    "ranked": {
+      "autostart_when": "NEVER"
+    },
+    
+    "when_idle_change_maps_once_every_mins": 15,
+    "match_unfreezes_once_first_player_spawns": true
+  },
+  "server_private": {
+    "master_rcon_password": "railway_default_password",
+    "log_performance_stats": true,
+    "performance_log_interval_seconds": 300
+  },
+  "num_casual_servers": 1,
+  "num_ranked_servers": 0,
+  
+  "client": {
+    "nickname": "Railway Bot",
+    "clan": "[Railway]"
+  }
+}

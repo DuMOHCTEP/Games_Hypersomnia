@@ -1,0 +1,41 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "dockerfile",
+    "dockerfilePath": "Dockerfile.railway"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "restartPolicyType": "always"
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "SERVER_NAME": "[Railway] Hypersomnia Production",
+        "MAX_PLAYERS": "20",
+        "RCON_PASSWORD": "secure_railway_2024",
+        "DEFAULT_ARENA": "de_cyberaqua", 
+        "SYNC_ARENAS": "true",
+        "DAILY_AUTOUPDATE": "false",
+        "CASUAL_SERVERS": "1",
+        "RANKED_SERVERS": "0",
+        "WEBRTC_PORT": "9000",
+        "DISCORD_WEBHOOK_URL": ""
+      }
+    },
+    "development": {
+      "variables": {
+        "SERVER_NAME": "[Railway-Dev] Hypersomnia Test",
+        "MAX_PLAYERS": "8",
+        "RCON_PASSWORD": "dev_test_123",
+        "DEFAULT_ARENA": "de_duel_practice",
+        "SYNC_ARENAS": "false", 
+        "DAILY_AUTOUPDATE": "false",
+        "CASUAL_SERVERS": "1",
+        "RANKED_SERVERS": "0",
+        "WEBRTC_PORT": "9000"
+      }
+    }
+  }
+}

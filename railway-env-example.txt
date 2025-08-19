@@ -1,0 +1,51 @@
+# Пример переменных окружения для Railway развертывания Hypersomnia
+# Установите эти переменные через Railway веб-панель или CLI
+
+# === ОСНОВНЫЕ НАСТРОЙКИ СЕРВЕРА ===
+SERVER_NAME="[Railway] Hypersomnia Server"
+MAX_PLAYERS=20
+RCON_PASSWORD="secure_railway_password_2024"
+
+# === ИГРОВЫЕ НАСТРОЙКИ ===
+DEFAULT_ARENA="de_cyberaqua"
+SYNC_ARENAS="true"
+DAILY_AUTOUPDATE="false"
+
+# Список карт для ротации (через запятую в JSON конфигурации)
+# de_cyberaqua, de_silo, de_metro, de_duel_practice, de_facing_worlds
+
+# === НАСТРОЙКИ СЕРВЕРНЫХ ИНСТАНСОВ ===
+CASUAL_SERVERS="1"
+RANKED_SERVERS="0"
+
+# === СЕТЕВЫЕ НАСТРОЙКИ ===
+# Railway автоматически установит PORT переменную
+WEBRTC_PORT="9000"
+
+# === ИНТЕГРАЦИИ ===
+# Discord Webhook для уведомлений (опционально)
+DISCORD_WEBHOOK_URL=""
+
+# === ДОПОЛНИТЕЛЬНЫЕ ФЛАГИ ===
+# Дополнительные аргументы для сервера
+EXTRA_FLAGS=""
+
+# === ПРОИЗВОДСТВЕННЫЕ НАСТРОЙКИ ===
+# Время простоя перед сменой карт (минуты)
+IDLE_MAP_CHANGE_MINUTES="15"
+
+# Время разминки перед матчем (секунды) 
+WARMUP_SECONDS="10"
+
+# Время заморозки в начале раунда (секунды)
+FREEZE_SECONDS="3"
+
+# === ЛОГИРОВАНИЕ И МОНИТОРИНГ ===
+LOG_PERFORMANCE_STATS="true"
+PERFORMANCE_LOG_INTERVAL="300"
+
+# === КОМАНДЫ RAILWAY CLI ===
+# Установка переменных через CLI:
+# railway variables set SERVER_NAME="[Railway] My Server"
+# railway variables set RCON_PASSWORD="your_secure_password"
+# railway variables set MAX_PLAYERS="20"

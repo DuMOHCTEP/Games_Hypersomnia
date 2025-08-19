@@ -1,0 +1,47 @@
+FROM docker.io/library/debian:bookworm-20250610-slim AS downloader
+
+# Установка wget для скачивания AppImage
+RUN apt-get update && apt-get install -y wget && \
+    wget -q https://hypersomnia.xyz/builds/latest/Hypersomnia-Headless.AppImage && \
+    chmod +x Hypersomnia-Headless.AppImage
+
+FROM docker.io/library/debian:bookworm-20250610-slim
+
+WORKDIR /home/hypersomniac
+
+# Установка необходимых пакетов для Railway
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libpsl5 \
+    libssl3 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -r hypersomniac \
+    && useradd -r -g hypersomniac hypersomniac \
+    && mkdir -p /home/hypersomniac/.config/Hypersomnia/user/conf.d \
+    && chown -R hypersomniac:hypersomniac /home/hypersomniac
+
+# Копирование AppImage из downloader stage
+COPY --from=downloader --chown=hypersomniac:hypersomniac \
+    Hypersomnia-Headless.AppImage /home/hypersomniac/Hypersomnia-Headless.AppImage
+
+# Копирование конфигурационных файлов для Railway
+COPY --chown=hypersomniac:hypersomniac railway-server-config.json /home/hypersomniac/.config/Hypersomnia/user/conf.d/server.json
+
+USER hypersomniac
+
+# Установка переменных окружения для Railway
+ENV APPDATA_DIR="/home/hypersomniac/.config/Hypersomnia"
+ENV SERVER_PORT=${PORT:-8412}
+ENV WEBRTC_PORT=${WEBRTC_PORT:-9000}
+
+# Создание startup script для Railway
+COPY --chown=hypersomniac:hypersomniac start-railway.sh /home/hypersomniac/start-railway.sh
+RUN chmod +x /home/hypersomniac/start-railway.sh
+
+# Railway автоматически устанавливает PORT переменную
+EXPOSE $PORT
+EXPOSE 8412/udp
+EXPOSE 9000/udp
+
+CMD ["./start-railway.sh"]
