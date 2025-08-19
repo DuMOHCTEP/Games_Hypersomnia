@@ -1,0 +1,95 @@
+# Полная связка: Веб-клиент + Сервер Hypersomnia для Railway
+FROM emscripten/emsdk:latest AS web-builder
+
+WORKDIR /app
+COPY . .
+
+# Сборка веб-клиента
+ENV CC=emcc
+ENV CXX=em++
+
+# Pre-build версия и introspector генераторов 
+RUN mkdir -p build-web/prebuilt-version build-web/prebuilt-introspector
+
+# Сборка версия генератора
+WORKDIR /app/build-web/prebuilt-version
+RUN cmake -DCMAKE_BUILD_TYPE=Release /app/cmake/version_file_generator -G Ninja && ninja
+
+# Сборка introspector генератора  
+WORKDIR /app/build-web/prebuilt-introspector
+RUN cmake -DCMAKE_BUILD_TYPE=Release /app/cmake/Introspector-generator -G Ninja && ninja
+
+# Основная сборка веб-клиента
+WORKDIR /app/build-web
+RUN emcmake cmake \
+    -DARCHITECTURE=Web \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DVERSION_FILE_GENERATOR_PATH=/app/build-web/prebuilt-version/version_file_generator \
+    -DINTROSPECTOR_GENERATOR_PATH=/app/build-web/prebuilt-introspector/Introspector-generator \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    /app -G Ninja
+
+RUN emmake ninja
+
+# Копируем веб-файлы в отдельную директорию
+RUN mkdir -p /web-client && \
+    cp Hypersomnia.html /web-client/index.html && \
+    cp Hypersomnia.js /web-client/ && \
+    cp Hypersomnia.wasm /web-client/ && \
+    cp -r /app/cmake/web/assets /web-client/ && \
+    cp /app/portal-web-config.json /web-client/default_config.json && \
+    ls -la /web-client/
+
+# Основной контейнер с nginx + сервер
+FROM docker.io/library/debian:bookworm-20250610-slim AS downloader
+RUN apt-get update && apt-get install -y wget && \
+    wget -q https://hypersomnia.xyz/builds/latest/Hypersomnia-Headless.AppImage && \
+    chmod +x Hypersomnia-Headless.AppImage
+
+FROM docker.io/library/debian:bookworm-20250610-slim
+
+WORKDIR /home/hypersomniac
+
+# Установка nginx + необходимые пакеты
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libpsl5 \
+    libssl3 \
+    curl \
+    nginx \
+    python3 \
+    python3-minimal \
+    procps \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -r hypersomniac \
+    && useradd -r -g hypersomniac hypersomniac \
+    && mkdir -p /home/hypersomniac/.config/Hypersomnia/user/conf.d \
+    && chown -R hypersomniac:hypersomniac /home/hypersomniac
+
+# Копирование веб-клиента из builder
+COPY --from=web-builder /web-client /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+
+# Копирование серверных файлов
+COPY --from=downloader --chown=hypersomniac:hypersomniac \
+    Hypersomnia-Headless.AppImage /home/hypersomniac/Hypersomnia-Headless.AppImage
+
+COPY --chown=hypersomniac:hypersomniac railway-server-config.json /home/hypersomniac/.config/Hypersomnia/user/conf.d/server.json
+COPY --chown=hypersomniac:hypersomniac health_server.py /home/hypersomniac/health_server.py  
+COPY --chown=hypersomniac:hypersomniac start-fullstack.sh /home/hypersomniac/start-fullstack.sh
+RUN chmod +x /home/hypersomniac/start-fullstack.sh /home/hypersomniac/health_server.py
+
+# Конфигурация nginx для веб-клиента
+COPY nginx-fullstack.conf /etc/nginx/sites-available/default
+
+# Переменные окружения
+ENV APPDATA_DIR="/home/hypersomniac/.config/Hypersomnia"
+
+# Экспорт портов
+EXPOSE $PORT     # Railway HTTP
+EXPOSE 80        # Nginx веб-клиент  
+EXPOSE 8412/udp  # Игровой сервер
+EXPOSE 9000/udp  # WebRTC
+
+USER root
+CMD ["./home/hypersomniac/start-fullstack.sh"]

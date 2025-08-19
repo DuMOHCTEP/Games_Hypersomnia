@@ -1,0 +1,83 @@
+{
+    "skip_tutorial": false,
+    "launch_at_startup": "MAIN_MENU",
+    "last_activity": "MAIN_MENU",
+
+    "log_timestamp_format": "[%H:%M:%S] ",
+
+    "server_list_provider": "http://masterserver.hypersomnia.xyz:8410",
+    "webrtc_signalling_server_url": "wss://masterserver.hypersomnia.xyz:8000",
+
+    "client_connect": "localhost:8412",
+    
+    "streamer_mode": false,
+    "streamer_mode_flags": {
+        "chat": true,
+        "chat_open": false,
+        "inworld_hud": true,
+        "scoreboard": true,
+        "spectator_ui": true,
+        "kill_notifications": true,
+        "death_summary": true,
+        "community_servers": true,
+        "map_catalogue": false
+    },
+
+    "window": {
+        "name": "Ваш Игровой Портал - Hypersomnia",
+        "app_icon_path": "content/gfx/necessary/app.ico",
+        "fullscreen": false,
+        "border": true,
+        "position": [40, 40],
+        "bpp": 32,
+        "size": [1200, 700],
+        "draw_own_cursor_in_fullscreen": true,
+        "log_keystrokes": false,
+        "vsync_mode": "OFF",
+        "max_fps": 60,
+        "max_fps_method": "YIELD",
+        "map_caps_lock_to_esc": false
+    },
+
+    "renderer": {
+        "default_filtering": "NEAREST_NEIGHBOR"
+    },
+
+    "audio": {
+        "mute_main_menu_background": false,
+        "output_mode": "STEREO_HRTF",
+        "output_device_name": "",
+        "max_number_of_sound_sources": 2100,
+        "sound_meters_per_second": 150.0
+    },
+
+    "audio_volume": {
+        "master": 0.8,
+        "sound_effects": 0.75,
+        "music": 0.55
+    },
+
+    "input": {
+        "character": {
+            "crosshair_sensitivity": {
+                "x": 2.2,
+                "y": 2.2
+            }
+        }
+    },
+
+    "client": {
+        "nickname": "Игрок",
+        "clan": "[Portal]",
+        "rcon_password": "",
+        "net": {
+            "jitter_buffer_ms": 10,
+            "max_commands_to_squash_at_once": 255
+        }
+    },
+
+    "content_regeneration": {
+        "regenerate_every_launch": false,
+        "rescan_assets_on_window_focus": false
+    }
+}
